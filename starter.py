@@ -1,7 +1,7 @@
 print("Start")
 
 from PIL import Image, ImageDraw
-im = Image.open("bridge.jpg")
+im = Image.open("Beluga.jpg")
 px = im.load()
 
 width = im.size[0]
