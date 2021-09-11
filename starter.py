@@ -1,5 +1,7 @@
+# %%
 from PIL import Image, ImageDraw
 
+# %%
 def blackAndWhite(im):
   """Half the image black and white and draw a 
   rectable in the top right corner."""
@@ -28,14 +30,52 @@ def blackAndWhite(im):
 
   draw.rectangle((10, 10, 100, 100), outline = (255, 0, 0))
 
-  im.save("out.png", "PNG")
+  im.save("blackAndWhite.png", "PNG")
+
+# %%
+def crop(im :Image, ulx, uly, lrx, lry):
+    """Crop the image"""
+    image = im.load()
+
+    width = lrx - ulx
+    height = lry - uly
+    newIm = Image.new(mode="RGB", size=(width, height))
+    newLoad = newIm.load()
+    
+    for h in range(height):
+        for w in range(width):
+            pixelInt = image[w + ulx, h + uly]
+            newRGB = (pixelInt)
+            newLoad[w, h] = newRGB
+
+    newIm.show()
+
+    newIm.save("cropped.png", "PNG")
+
+# %%
+def translate(im, i, j, bool):
+    """Translate the image"""
+    px = im.load()
+
+    im.save("trasnlate.png", "PNG")
 
 
 
+# %%
 print("Start")
 
+
 im = Image.open("Beluga.jpg")
+
+width = im.size[0]
+height = im.size[1]
+
 blackAndWhite(im)
+
+crop(im, 500, 500, width, height)
+
+# translate(im, 50, 50, False)
 
 print("Finish")
 
+# %%
