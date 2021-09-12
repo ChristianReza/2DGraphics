@@ -30,6 +30,8 @@ def blackAndWhite(im):
 
   draw.rectangle((10, 10, 100, 100), outline = (255, 0, 0))
 
+  im.show()
+
   im.save("blackAndWhite.png", "PNG")
 
 # %%
@@ -56,8 +58,31 @@ def crop(im :Image, ulx, uly, lrx, lry):
 def translate(im, i, j, bool):
     """Translate the image"""
     px = im.load()
+    width = im.size[0]
+    height = im.size[1]
+    newIm = Image.new(mode="RGB", size=(width, height))
 
-    im.save("trasnlate.png", "PNG")
+    for h in range(height):
+        for w in range(width):
+            originalX = w - i
+            originalY = h - j
+
+            if (originalX < 0 or 
+                originalX >= width or
+                    originalY < 0 or
+                        originalY >= height):
+                        continue
+
+            pixelInt = px[originalX, originalY]
+            newRBG = (pixelInt)
+            newLoad = newIm.load()
+            newLoad[w, h] = newRBG
+
+
+    newIm.show()
+
+
+    newIm.save("trasnlate.png", "PNG")
 
 
 
@@ -65,7 +90,7 @@ def translate(im, i, j, bool):
 print("Start")
 
 
-im = Image.open("Beluga.jpg")
+im = Image.open("Beluga2.jpg")
 
 width = im.size[0]
 height = im.size[1]
@@ -74,7 +99,7 @@ blackAndWhite(im)
 
 crop(im, 500, 500, width, height)
 
-# translate(im, 50, 50, False)
+translate(im, 50, 50, False)
 
 print("Finish")
 
