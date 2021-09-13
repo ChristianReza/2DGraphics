@@ -60,7 +60,7 @@ def translate(im, i, j, bool):
     px = im.load()
     width = im.size[0]
     height = im.size[1]
-    newIm = Image.new(mode="RGB", size=(width, height))
+    newIm = Image.new(mode="RGBA", size=(width, height))
 
     for h in range(height):
         for w in range(width):
@@ -85,12 +85,50 @@ def translate(im, i, j, bool):
     newIm.save("trasnlate.png", "PNG")
 
 
+def scaleNearestNeighbor(im, scaleX, scaleY):
+  """Scale nearest neighbor"""
+  px = im.load()
+  width = im.size[0]
+  height = im.size[1]
+  newIm = Image.new(mode="RGB", size=(width, height))
+
+  for y in range(height):
+      for x in range(width):
+        originalX = (x * (1/scaleX))
+        originalY = (y * (1/scaleY))
+
+        if (originalX < 0 or 
+            originalX >= width or
+                originalY < 0 or
+                    originalY >= height):
+                    continue
+        
+        pixelInt = px[originalX, originalY]
+        newRBG = (pixelInt)
+        newLoad = newIm.load()
+        newLoad[x, y] = newRBG
+
+  newIm.show()
+  newIm.save("scale.png", "PNG")
+
+
+def roateNearestNeighbor(im, angle):
+  """
+  rotate around upper left pixel
+  in image processesing, a positive angle
+  rotates clockwise.
+
+  atan2
+  """
+
+  
+
 
 # %%
+
 print("Start")
 
-
-im = Image.open("Beluga2.jpg")
+im = Image.open("Beluga.jpg")
 
 width = im.size[0]
 height = im.size[1]
@@ -100,6 +138,10 @@ blackAndWhite(im)
 crop(im, 500, 500, width, height)
 
 translate(im, 50, 50, False)
+
+scaleNearestNeighbor(im, 0.5, 0.5)
+
+# roateNearestNeighbor(im, 20)
 
 print("Finish")
 
