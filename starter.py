@@ -1,5 +1,6 @@
 # %%
 from PIL import Image, ImageDraw
+import colorsys
 
 # %%
 def blackAndWhite(im):
@@ -121,6 +122,14 @@ def roateNearestNeighbor(im, angle):
   atan2
   """
 
+# %%
+def convertHSV():
+  """Convert RGB to HSV"""
+  r = 0.225
+  g = 0.128
+  b = 0.64
+  print(colorsys.rgb_to_hsv(r, g, b))
+  
   
 
 
@@ -128,7 +137,7 @@ def roateNearestNeighbor(im, angle):
 
 print("Start")
 
-im = Image.open("Beluga.jpg")
+im = Image.open("MuskDeer.jpg")
 
 width = im.size[0]
 height = im.size[1]
