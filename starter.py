@@ -114,6 +114,49 @@ def translateNearestNeighbor(im, i, j, bool):
 
     newIm.save("trasnlateNearestNeighbor.png", "PNG")
 
+def translateLinear(im, i, j, bool):
+    """Translate image with nearest neighbor"""
+    px = im.load()
+    width = im.size[0]
+    height = im.size[1]
+    newIm = Image.new(mode="RGBA", size=(width, height))
+
+    for y in range(height):
+        for x in range(width):
+            originalX = (x - i + .5)
+            leftPixel = originalX
+            rightPixel = originalX + 1
+            originalY = (y - j + .5)
+
+            if (originalX < 0 or 
+                originalX >= width or
+                    originalY < 0 or
+                        originalY >= height):
+                        continue
+            
+            pixelLeft = px[leftPixel, originalY]
+            pixelRight = px[rightPixel, originalY]
+
+            percent = i - int(i)
+            # (Red * 1 - percent), (Green * 1 - percent), (Blue * 1 - percent)
+            leftPixelColoration = (int(pixelLeft[0] * (1 - percent)), int(pixelLeft[1] * (1 - percent)), int(pixelLeft[2] * (1 - percent)))
+            # (Red * percent), (Green * percent), (Blue * percent)
+            rightPixelColoration = (int(pixelRight[0] * (percent)), int(pixelRight[1] * (percent)), int(pixelRight[2] * (percent)))
+
+            finalRed = leftPixelColoration[0] + rightPixelColoration[0]
+            finalGreen = leftPixelColoration[1] + rightPixelColoration[1]
+            finalBlue = leftPixelColoration[2] + rightPixelColoration[2]
+
+            finalColor = (finalRed, finalGreen, finalBlue)
+
+            newLoad = newIm.load()
+            newLoad[x, y] = finalColor
+
+
+    newIm.show()
+
+    newIm.save("translateLinear.png", "PNG")
+
 
 def scaleNearestNeighbor(im, scaleX, scaleY):
   """Scale nearest neighbor"""
@@ -238,7 +281,9 @@ height = im.size[1]
 
 # translate(im, 50, 50, False)
 
-# translateNearestNeighbor(im2, 50.5, 50.5, False)
+translateNearestNeighbor(im2, 50.5, 50.5, False)
+
+translateLinear(im2, 50.5, 50.5, False)
 
 # scaleNearestNeighbor(im, 0.5, 0.5)
 
