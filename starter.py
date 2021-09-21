@@ -1,6 +1,7 @@
 # %%
 from PIL import Image, ImageDraw
 import colorsys
+import numpy as np
 
 # %%
 def blackAndWhite(im):
@@ -85,6 +86,34 @@ def translate(im, i, j, bool):
 
     newIm.save("trasnlate.png", "PNG")
 
+def translateNearestNeighbor(im, i, j, bool):
+    """Translate image with nearest neighbor"""
+    px = im.load()
+    width = im.size[0]
+    height = im.size[1]
+    newIm = Image.new(mode="RGBA", size=(width, height))
+
+    for y in range(height):
+        for x in range(width):
+            originalX = (x - i + .5)
+            originalY = (y - j + .5)
+
+            if (originalX < 0 or 
+                originalX >= width or
+                    originalY < 0 or
+                        originalY >= height):
+                        continue
+
+            pixelInt = px[originalX, originalY]
+            newRBG = (pixelInt)
+            newLoad = newIm.load()
+            newLoad[x, y] = newRBG
+
+
+    newIm.show()
+
+    newIm.save("trasnlateNearestNeighbor.png", "PNG")
+
 
 def scaleNearestNeighbor(im, scaleX, scaleY):
   """Scale nearest neighbor"""
@@ -129,28 +158,93 @@ def convertHSV():
   g = 0.128
   b = 0.64
   print(colorsys.rgb_to_hsv(r, g, b))
+
+
+# %%
+def blurImage(im, kernel):
+    """blur image"""
+    pix = im.load()
+    width = im.size[0]
+    height = im.size[1]
+    newIm = Image.new(mode="RGB", size=(width, height))
+    newLoad = newIm.load()
+
+    # Create image clone to blur
+    for y in range(height):
+        for x in range(width):
+            rgb = pix[x, y]
+            r = rgb[0]
+            g = rgb[1]
+            b = rgb[2]
+            newRGB = (r, g, b)
+            newLoad[x, y] = newRGB
+    newIm.show()
+
+
+    for y in range(height):
+        for x in range(width):
+            sum = float(0)
+            for ky in range(-1, 1):
+                for kx in range(-1, 1):
+                    color = []
+                    px = x + kx
+                    py = y + ky
+                    if (px >= 0 and px < width and py >= 0 and py < height):
+                        color = pix[px, py]
+                    
+                    greyScale = 0 if color == [] else color[0] # get red value else 0
+                    kernelValue = kernel[kx + 1][ky + 1]
+                    sum += (greyScale * kernelValue)
+                    
+            newRBG = int(sum)
+            
+            newLoad[x, y] = (newRBG, newRBG, newRBG)
+
+
+    newIm.show()
+    newIm.save("blur.png", "PNG")
   
-  
+
+# %%
+def imageKernel(im, blur=3):
+    """kernel for image blur"""
+    kernel = np.empty((blur, blur))
+#     create matrix
+#    [[0. 0. 0.]
+#     [0. 0. 0.]
+#     [0. 0. 0.]]
+
+    for y in range(blur):
+        for x in range(blur):
+            kernel[y][x] = float(1 / 9.0)
+    
+    blurImage(im, kernel)
+ 
 
 
 # %%
 
 print("Start")
 
-im = Image.open("MuskDeer.jpg")
+im = Image.open("Beluga.jpg")
+im2 = Image.open("MuskDeer.jpg")
 
 width = im.size[0]
 height = im.size[1]
 
-blackAndWhite(im)
+# blackAndWhite(im)
 
-crop(im, 500, 500, width, height)
+# crop(im, 500, 500, width, height)
 
-translate(im, 50, 50, False)
+# translate(im, 50, 50, False)
 
-scaleNearestNeighbor(im, 0.5, 0.5)
+# translateNearestNeighbor(im2, 50.5, 50.5, False)
+
+# scaleNearestNeighbor(im, 0.5, 0.5)
 
 # roateNearestNeighbor(im, 20)
+
+imageKernel(im)
 
 print("Finish")
 
