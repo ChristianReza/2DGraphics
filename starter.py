@@ -206,7 +206,7 @@ def convertHSV():
 # %%
 def blurImage(im, kernel):
     """blur image"""
-    pix = im.load()
+    newPix = im.load()
     width = im.size[0]
     height = im.size[1]
     newIm = Image.new(mode="RGB", size=(width, height))
@@ -215,7 +215,7 @@ def blurImage(im, kernel):
     # Create image clone to blur
     for y in range(height):
         for x in range(width):
-            rgb = pix[x, y]
+            rgb = newPix[x, y]
             r = rgb[0]
             g = rgb[1]
             b = rgb[2]
@@ -232,8 +232,11 @@ def blurImage(im, kernel):
                     color = []
                     px = x + kx
                     py = y + ky
-                    if (px >= 0 and px < width and py >= 0 and py < height):
-                        color = pix[px, py]
+                    if (px >= 0 and
+                            px < width and
+                                py >= 0 and
+                                    py < height):
+                        color = newPix[px, py]
                     
                     greyScale = 0 if color == [] else color[0] # get red value else 0
                     kernelValue = kernel[kx + 1][ky + 1]
