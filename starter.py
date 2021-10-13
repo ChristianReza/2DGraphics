@@ -34,15 +34,15 @@ class MyImage():
           px[x,y] = newRGB
 
     # Now draw a rectangle
-    draw = ImageDraw.Draw(im)
+    draw = ImageDraw.Draw(self.image)
 
     draw.rectangle((10, 10, 100, 100), outline = (255, 0, 0))
 
-    # im.show()
-
-    self.image = im
-
-    im.save("blackAndWhite.png", "PNG")
+    # im.save("blackAndWhite.png", "PNG")
+    # self.image = im
+    # self.width = im.size[0]
+    # self.height = im.size[1]
+    return self
 
   def crop(self, ulx, uly, lrx, lry):
       """Crop the image"""
@@ -281,6 +281,7 @@ class MyImage():
       for x in range(blur):
           kernel[y][x] = float(1 / 9.0)
     im.blurImage(kernel)
+    return self
 
 
   def done(self):
@@ -293,26 +294,23 @@ print("Start")
 
 im = MyImage(Image.open("chrome.jpg"))
 
-# im.blackAndWhite()
+# im.blackAndWhite().done()
 
-# im.crop(500, 500, im.width, im.height).translate(50, 50, False)
+# im.translate(50, 50, False).done()
 
-# im.translate(50, 50, False)
+# im.translateNearestNeighbor(50.5, 50.5, False).done()
 
-# im.translateNearestNeighbor(50.5, 50.5, False)
+# im.translateLinear(50.5, 50.5, False).done()
 
-# im.translateLinear(50.5, 50.5, False)
+# im.scaleNearestNeighbor(0.5, 0.5).done()
 
-# im.scaleNearestNeighbor(0.5, 0.5)
+im.roateNearestNeighbor(20)
 
-# roateNearestNeighbor(im, 20)
+# im.crop(500,500,im.width,im.height)\
+#     .translate(50,50,False)\
+#         .scaleNearestNeighbor(0.5, 0.5)\
+#             .done()
 
-im.crop(500,500,im.width,im.height)\
-    .translate(50,50,False)\
-        .scaleNearestNeighbor(0.5, 0.5)\
-            .done()
-
-# im.imageKernel()
 
 print("Finish")
 
