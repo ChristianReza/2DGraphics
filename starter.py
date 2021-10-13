@@ -40,6 +40,8 @@ class MyImage():
 
     # im.show()
 
+    self.image = im
+
     im.save("blackAndWhite.png", "PNG")
 
   def crop(self, ulx, uly, lrx, lry):
@@ -57,9 +59,10 @@ class MyImage():
               newRGB = (pixelInt)
               newLoad[w, h] = newRGB
 
-      # newim.show()
-
-      newIm.save("cropped.png", "PNG")
+      # newIm.save("cropped.png", "PNG")
+      self.image = newIm
+      self.width = newIm.size[0]
+      self.height = newIm.size[1]
       return self
 
   def translate(self, i, j, bool):
@@ -86,10 +89,10 @@ class MyImage():
               newLoad[w, h] = newRBG
 
 
-      # newim.show()
-
-
-      newIm.save("trasnlate.png", "PNG")
+      # newIm.save("trasnlate.png", "PNG")
+      self.image = newIm
+      self.width = newIm.size[0]
+      self.height = newIm.size[1]
       return self
 
   def translateNearestNeighbor(self, i, j, bool):
@@ -118,7 +121,10 @@ class MyImage():
 
       # # newim.show()
 
-      newIm.save("trasnlateNearestNeighbor.png", "PNG")
+      # newIm.save("trasnlateNearestNeighbor.png", "PNG")
+      self.image = newIm
+      self.width = newIm.size[0]
+      self.height = newIm.size[1]
       return self
 
   def translateLinear(self, i, j, bool):
@@ -162,7 +168,10 @@ class MyImage():
 
       # newim.show()
 
-      newIm.save("translateLinear.png", "PNG")
+      # newIm.save("translateLinear.png", "PNG")
+      self.image = newIm
+      self.width = newIm.size[0]
+      self.height = newIm.size[1]
       return self
 
   def scaleNearestNeighbor(self, scaleX, scaleY):
@@ -189,7 +198,10 @@ class MyImage():
           newLoad[x, y] = newRBG
 
     # newim.show()
-    newIm.save("scale.png", "PNG")
+    # newIm.save("scale.png", "PNG")
+    self.image = newIm
+    self.width = newIm.size[0]
+    self.height = newIm.size[1]
     return self
 
   def roateNearestNeighbor(im, angle):
@@ -253,6 +265,9 @@ class MyImage():
 
       # newim.show()
       newIm.save("blur.png", "PNG")
+      self.image = newIm
+      self.width = newIm.size[0]
+      self.height = newIm.size[1]
       return self
     
   def imageKernel(self, blur=3):
@@ -267,6 +282,10 @@ class MyImage():
           kernel[y][x] = float(1 / 9.0)
     im.blurImage(kernel)
 
+
+  def done(self):
+    self.image.save("finished.png", "PNG")
+
 # %%
 
 print("Start")
@@ -276,19 +295,24 @@ im = MyImage(Image.open("chrome.jpg"))
 
 # im.blackAndWhite()
 
-im.crop(500, 500, im.width, im.height).translate(50, 50, False)
+# im.crop(500, 500, im.width, im.height).translate(50, 50, False)
 
-im.translate(50, 50, False)
+# im.translate(50, 50, False)
 
-im.translateNearestNeighbor(50.5, 50.5, False)
+# im.translateNearestNeighbor(50.5, 50.5, False)
 
-im.translateLinear(50.5, 50.5, False)
+# im.translateLinear(50.5, 50.5, False)
 
-im.scaleNearestNeighbor(0.5, 0.5)
+# im.scaleNearestNeighbor(0.5, 0.5)
 
 # roateNearestNeighbor(im, 20)
 
-im.imageKernel()
+im.crop(500,500,im.width,im.height)\
+    .translate(50,50,False)\
+        .scaleNearestNeighbor(0.5, 0.5)\
+            .done()
+
+# im.imageKernel()
 
 print("Finish")
 
