@@ -283,16 +283,76 @@ class MyImage():
     im.blurImage(kernel)
     return self
 
+  def preview(self):
+    self.image.show()
 
   def done(self):
     self.image.save("finished.png", "PNG")
 
+
+
+def blackAndWhite():
+    return "blackAndWhite"
+def translate():
+    return "translate"
+def translateNearestNeighbor():
+    return "translateNearestNeighbor"
+def crop():
+    return "crop"
+def translateLinear():
+    return "translateLinear"
+def scaleNearestNeighbor():
+    return "scaleNearestNeighbor"
+def roateNearestNeighbor():
+    return "roateNearestNeighbor"
+def preview():
+    return "preview"
+def save():
+    return "save"
+def default():
+    return "Incorrect day"
+
+switcher = {
+    "1": blackAndWhite,
+    "2": translate,
+    "3": translateNearestNeighbor,
+    "4": crop,
+    "5": translateLinear,
+    "6": scaleNearestNeighbor,
+    "7": roateNearestNeighbor,
+    "8": preview,
+    "9": save
+    }
+
+def switch(action):
+    return switcher.get(action, default)()
+
 # %%
+selectedImage = input("Enter the name and extension of the image file to modify: ")
+im = MyImage(Image.open(selectedImage))
 
 print("Start")
-# im = MyImage(Image.open("Beluga.jpg"))
 
-im = MyImage(Image.open("chrome.jpg"))
+print("What kind of action would you like to preform on your image?")
+options = """
+ 1: Black and White
+ 2: Translate
+ 3: Translate Nearest Neighbor
+ 4: Crop
+ 5: Translate Linear
+ 6: ScaleNearest Neighbor
+ 7: Roate Nearest Neighbor
+ 8: Preview
+ 9: Save and quit
+"""
+print(options)
+request = ''
+while (request != '9'):
+    request = input("Option #: ")
+    print("request is :" + request)
+    print(switch(request))
+print("saved")
+# im = MyImage(Image.open("Beluga.jpg"))
 
 # im.blackAndWhite().done()
 
@@ -304,7 +364,7 @@ im = MyImage(Image.open("chrome.jpg"))
 
 # im.scaleNearestNeighbor(0.5, 0.5).done()
 
-im.roateNearestNeighbor(20)
+# im.roateNearestNeighbor(20)
 
 # im.crop(500,500,im.width,im.height)\
 #     .translate(50,50,False)\
