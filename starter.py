@@ -326,9 +326,17 @@ def crop():
     im.crop(ulx, uly)
     im.printDim()
 def translateLinear():
-    im.translateLinear()
+    im.printDim()
+    newX = int(input("Enter pixel amount to move image: "))
+    newY = int(input("Enter pixel amount to move image: "))
+    im.translateLinear(newX, newY, False)
+    im.printDim()
 def scaleNearestNeighbor():
-    im.scaleNearestNeighbor()
+    im.printDim()
+    newX = int(input("Enter scale for X: "))
+    newY = int(input("Enter scale for Y: "))
+    im.scaleNearestNeighbor(newX, newY)
+    im.printDim()
 def roateNearestNeighbor():
     im.roateNearestNeighbor()
 def preview():
