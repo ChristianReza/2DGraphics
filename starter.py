@@ -49,7 +49,9 @@ class MyImage():
       image = self.image.load()
 
       width = lrx - ulx
+    #   width = self.width - ulx
       height = lry - uly
+    #   height = self.height - uly
       newIm = Image.new(mode="RGB", size=(width, height))
       newLoad = newIm.load()
       
@@ -287,30 +289,52 @@ class MyImage():
     self.image.show()
 
   def done(self):
+    print("saving...")
     self.image.save("finished.png", "PNG")
 
+  def printDim(self):
+      print("Your new image dimensions are:")
+      print('width: {}\theight: {}' .format(self.width, self.height))
 
+# %%
+selectedImage = input("Enter the name and extension of the image file to modify: ")
+im = MyImage(Image.open(selectedImage))
+
+print("Start")
+
+def switch(action):
+    return switcher.get(action, default)()
 
 def blackAndWhite():
-    return "blackAndWhite"
+    im.blackAndWhite()
 def translate():
-    return "translate"
+    newX = input("Enter pixel amount to move image: ")
+    newY = input("Enter pixel amount to move image: ")
+    im.translate(newX, newY, False)
 def translateNearestNeighbor():
-    return "translateNearestNeighbor"
+    newX = input("Enter pixel amount to move image: ")
+    newY = input("Enter pixel amount to move image: ")
+    im.translateNearestNeighbor(newX, newY, False)
 def crop():
-    return "crop"
+    ulx = int(input("Enter new upper left X-pixel: "))
+    uly = int(input("Enter new upper left Y-pixel: "))
+    lrx = int(input("Enter lower right X-pixel: "))
+    lry = int(input("Enter lower left Y-pixel: "))
+    im.crop(ulx, uly, lrx, lry)
+    im.printDim()
 def translateLinear():
-    return "translateLinear"
+    im.translateLinear()
 def scaleNearestNeighbor():
-    return "scaleNearestNeighbor"
+    im.scaleNearestNeighbor()
 def roateNearestNeighbor():
-    return "roateNearestNeighbor"
+    im.roateNearestNeighbor()
 def preview():
-    return "preview"
+    im.preview()
 def save():
+    im.done()
     return "save"
 def default():
-    return "Incorrect day"
+    return "Invalid Request"
 
 switcher = {
     "1": blackAndWhite,
@@ -323,15 +347,6 @@ switcher = {
     "8": preview,
     "9": save
     }
-
-def switch(action):
-    return switcher.get(action, default)()
-
-# %%
-selectedImage = input("Enter the name and extension of the image file to modify: ")
-im = MyImage(Image.open(selectedImage))
-
-print("Start")
 
 print("What kind of action would you like to preform on your image?")
 options = """
@@ -350,8 +365,7 @@ request = ''
 while (request != '9'):
     request = input("Option #: ")
     print("request is :" + request)
-    print(switch(request))
-print("saved")
+    switch(request)
 # im = MyImage(Image.open("Beluga.jpg"))
 
 # im.blackAndWhite().done()
@@ -372,6 +386,4 @@ print("saved")
 #             .done()
 
 
-print("Finish")
 
-# %%
