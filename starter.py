@@ -23,15 +23,15 @@ class MyImage():
         rgb = px[x,y]
 
         r = rgb[0]
-        g = rgb[1]
-        b = rgb[2]
+        # g = rgb[1]
+        # b = rgb[2]
 
-        if(x < width/2):
-          g = r
-          b = r
+        # if(x < width/2):
+        g = r
+        b = r
 
-          newRGB = (r, g, b)
-          px[x,y] = newRGB
+        newRGB = (r, g, b)
+        px[x,y] = newRGB
 
     # Now draw a rectangle
     draw = ImageDraw.Draw(self.image)
@@ -44,14 +44,14 @@ class MyImage():
     # self.height = im.size[1]
     return self
 
-  def crop(self, ulx, uly, lrx, lry):
+  def crop(self, ulx, uly, lrx=0, lry=0):
       """Crop the image"""
       image = self.image.load()
 
-      width = lrx - ulx
-    #   width = self.width - ulx
-      height = lry - uly
-    #   height = self.height - uly
+    #   width = lrx - ulx
+      width = self.width - ulx
+    #   height = lry - uly
+      height = self.height - uly
       newIm = Image.new(mode="RGB", size=(width, height))
       newLoad = newIm.load()
       
@@ -293,7 +293,7 @@ class MyImage():
     self.image.save("finished.png", "PNG")
 
   def printDim(self):
-      print("Your new image dimensions are:")
+      print("Your image dimensions are:")
       print('width: {}\theight: {}' .format(self.width, self.height))
 
 # %%
@@ -308,19 +308,22 @@ def switch(action):
 def blackAndWhite():
     im.blackAndWhite()
 def translate():
-    newX = input("Enter pixel amount to move image: ")
-    newY = input("Enter pixel amount to move image: ")
+    im.printDim()
+    newX = int(input("Enter pixel amount to move image: "))
+    newY = int(input("Enter pixel amount to move image: "))
     im.translate(newX, newY, False)
+    im.printDim()
 def translateNearestNeighbor():
-    newX = input("Enter pixel amount to move image: ")
-    newY = input("Enter pixel amount to move image: ")
+    im.printDim()
+    newX = int(input("Enter pixel amount to move image: "))
+    newY = int(input("Enter pixel amount to move image: "))
     im.translateNearestNeighbor(newX, newY, False)
+    im.printDim()
 def crop():
+    im.printDim()
     ulx = int(input("Enter new upper left X-pixel: "))
     uly = int(input("Enter new upper left Y-pixel: "))
-    lrx = int(input("Enter lower right X-pixel: "))
-    lry = int(input("Enter lower left Y-pixel: "))
-    im.crop(ulx, uly, lrx, lry)
+    im.crop(ulx, uly)
     im.printDim()
 def translateLinear():
     im.translateLinear()
@@ -355,7 +358,7 @@ options = """
  3: Translate Nearest Neighbor
  4: Crop
  5: Translate Linear
- 6: ScaleNearest Neighbor
+ 6: Scale Nearest Neighbor
  7: Roate Nearest Neighbor
  8: Preview
  9: Save and quit
@@ -366,24 +369,4 @@ while (request != '9'):
     request = input("Option #: ")
     print("request is :" + request)
     switch(request)
-# im = MyImage(Image.open("Beluga.jpg"))
-
-# im.blackAndWhite().done()
-
-# im.translate(50, 50, False).done()
-
-# im.translateNearestNeighbor(50.5, 50.5, False).done()
-
-# im.translateLinear(50.5, 50.5, False).done()
-
-# im.scaleNearestNeighbor(0.5, 0.5).done()
-
-# im.roateNearestNeighbor(20)
-
-# im.crop(500,500,im.width,im.height)\
-#     .translate(50,50,False)\
-#         .scaleNearestNeighbor(0.5, 0.5)\
-#             .done()
-
-
 
