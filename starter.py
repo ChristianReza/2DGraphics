@@ -222,6 +222,57 @@ class MyImage():
     b = 0.64
     print(colorsys.rgb_to_hsv(r, g, b))
 
+
+  def histogram(self, cap):
+    """Create histogram of image"""
+    px = self.image.load()
+    width = 256
+    height = 300
+    histogramImage = Image.new(mode="RGB", size=(width, height), color=(0,0,0))
+    # px = histogramImage.load()
+    counts = [0] * 256
+    for y in range(self.height):
+        for x in range(self.width):
+    # Generate the histogram info
+            rgb = px[x,y]
+            r = rgb[0]
+            g = rgb[1]
+            b = rgb[2]
+            hsv = [0] * 3
+            self.myConversion(r, g, b, hsv)
+            value = (hsv[2] * 255)
+            if(value != 1):
+                counts[value] += 1
+
+    # Render the histogram
+    maxValue = max(counts)
+    if(cap != -1):
+        maxValue = cap
+    for x in range (len(counts)):
+        draw = ImageDraw.Draw(histogramImage)
+        # draw.rectangle((0, 0, len(counts), height), outline = (255, 255, 255))
+        print(counts[x])
+        print(maxValue)
+        print(height)
+        percent = (counts[x] / maxValue * height)
+        # g.setColor(Color.WHITE)
+        draw.rectangle((x, height - percent, 1, percent), outline= (255,255,255))
+        # g.fillRect(x, height - percent, 1, percent)
+    
+    # histogramImage.show()
+    histogramImage.save("histogram.png", "PNG")
+    return self
+
+
+  def brighten(self, i):
+      """brighten image"""
+
+
+  def myConversion(self, r, g, b, hsv):
+      """DO conversion"""
+      return self
+
+
   def blurImage(self, kernel):
       """blur image"""
       newPix = self.image.load()
@@ -339,6 +390,11 @@ def scaleNearestNeighbor():
     im.printDim()
 def roateNearestNeighbor():
     im.roateNearestNeighbor()
+def histogram():
+    im.histogram(-1)
+def brighten():
+    brightenBy = int(input("Brighten by what: "))
+    im.brighten(brightenBy)
 def preview():
     im.preview()
 def save():
@@ -355,8 +411,10 @@ switcher = {
     "5": translateLinear,
     "6": scaleNearestNeighbor,
     "7": roateNearestNeighbor,
-    "8": preview,
-    "9": save
+    "8": histogram,
+    "9": brighten,
+    "10": preview,
+    "11": save
     }
 
 print("What kind of action would you like to preform on your image?")
@@ -368,8 +426,10 @@ options = """
  5: Translate Linear
  6: Scale Nearest Neighbor
  7: Roate Nearest Neighbor
- 8: Preview
- 9: Save and quit
+ 8: Histogram
+ 9: brighten
+ 10: Preview
+ 11: Save and quit
 """
 print(options)
 request = ''
