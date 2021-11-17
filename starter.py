@@ -240,9 +240,11 @@ class MyImage():
             b = rgb[2]
             hsv = [0] * 3
             self.myConversion(r, g, b, hsv)
-            value = (hsv[2] * 255)
+            # print(hsv)
+            value = (int)(hsv[2] * 255)
             if(value != 1):
                 counts[value] += 1
+                # print('{} index of count = {}'.format(value, counts[value]))
 
     # Render the histogram
     maxValue = max(counts)
@@ -251,12 +253,14 @@ class MyImage():
     for x in range (len(counts)):
         draw = ImageDraw.Draw(histogramImage)
         # draw.rectangle((0, 0, len(counts), height), outline = (255, 255, 255))
-        print(counts[x])
-        print(maxValue)
-        print(height)
+        # print(counts[x])
+        # print(maxValue)
+        # print(height)
         percent = (counts[x] / maxValue * height)
+        # print('x {} max {} height {} percent {}'.format(counts[x], maxValue, height, percent))
         # g.setColor(Color.WHITE)
         draw.rectangle((x, height - percent, 1, percent), outline= (255,255,255))
+        # draw.rectangle((x, x, x, x), outline=(255,255,255))
         # g.fillRect(x, height - percent, 1, percent)
     
     # histogramImage.show()
@@ -269,7 +273,45 @@ class MyImage():
 
 
   def myConversion(self, r, g, b, hsv):
-      """DO conversion"""
+      """Populate HSV"""
+      hue = -1
+      saturation = -1
+      value = -1
+
+      red = (r / 255.0)
+      green = (g / 255.0)
+      blue = (b / 255.0)
+
+      cMax = max(max(red, green), blue)
+      value = cMax
+      cMin = min(min(red, green), blue)
+      delta = cMax - cMin
+
+      if (cMax == 0):
+        hue = 0
+        value = 0
+        saturation = 0
+      else:
+        if (delta == 0):
+          hue = 0
+          saturation = (cMax - cMin) / cMax
+  
+        else:
+  
+          saturation = (cMax - cMin) / cMax
+  
+          if (cMax == red):
+            hue = (60 * (green - blue) / delta + 0) % 360
+          elif (cMax == green):
+            hue = (60 * (blue - red) / delta + 120) % 360
+          elif (cMax == blue):
+            hue = (60 * (red - green) / delta + 240) % 360
+  
+          hue /= 360
+
+      hsv[0] = hue
+      hsv[1] = saturation
+      hsv[2] = value
       return self
 
 
@@ -433,7 +475,7 @@ options = """
 """
 print(options)
 request = ''
-while (request != '9'):
+while (request != '11'):
     request = input("Option #: ")
     print("request is :" + request)
     switch(request)
