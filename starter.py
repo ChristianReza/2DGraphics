@@ -34,9 +34,9 @@ class MyImage():
         px[x,y] = newRGB
 
     # Now draw a rectangle
-    draw = ImageDraw.Draw(self.image)
+    # draw = ImageDraw.Draw(self.image)
 
-    draw.rectangle((10, 10, 100, 100), outline = (255, 0, 0))
+    # draw.rectangle((10, 10, 100, 100), outline = (255, 0, 0))
 
     # im.save("blackAndWhite.png", "PNG")
     # self.image = im
