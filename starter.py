@@ -215,14 +215,6 @@ class MyImage():
     atan2
     """
 
-  def convertHSV():
-    """Convert RGB to HSV"""
-    r = 0.225
-    g = 0.128
-    b = 0.64
-    print(colorsys.rgb_to_hsv(r, g, b))
-
-
   def histogram(self, cap):
     """Create histogram of image"""
     px = self.image.load()
@@ -230,7 +222,7 @@ class MyImage():
     height = 300
     histogramImage = Image.new(mode="RGB", size=(width, height), color=(0,0,0))
     # px = histogramImage.load()
-    counts = [0] * 256
+    counts = [0] * width
     for y in range(self.height):
         for x in range(self.width):
     # Generate the histogram info
@@ -239,12 +231,15 @@ class MyImage():
             g = rgb[1]
             b = rgb[2]
             hsv = [0] * 3
+            print('new hsv: {}' .format(hsv))
             self.myConversion(r, g, b, hsv)
-            # print(hsv)
-            value = (int)(hsv[2] * 255)
-            if(value != 1):
-                counts[value] += 1
-                # print('{} index of count = {}'.format(value, counts[value]))
+            # print('converted hsv: {}' .format(hsv))
+            value = (int)(hsv[2]*255)
+            # if(value == 1):
+            print('counts[{}] = {}'.format(value, counts[value]))
+            counts[value] += 1
+            print('counts[{}] = {}'.format(value, counts[value]))
+            print('\n==================\n')
 
     # Render the histogram
     maxValue = max(counts)
@@ -259,9 +254,12 @@ class MyImage():
         percent = (counts[x] / maxValue * height)
         # print('x {} max {} height {} percent {}'.format(counts[x], maxValue, height, percent))
         # g.setColor(Color.WHITE)
-        draw.rectangle((x, height - percent, 1, percent), outline= (255,255,255))
-        # draw.rectangle((x, x, x, x), outline=(255,255,255))
-        # g.fillRect(x, height - percent, 1, percent)
+        # print('x: {}, height: {}, percent: {}'.format(x, height, percent))
+        # draw.rectangle([(x, height - percent), (x, height - percent)], outline= (255,255,255))
+        # draw.line([(x, height - percent), (x,1)], width=1, fill="white")
+        draw.rectangle([(x, height - percent), (x, x)], outline=(255,255,255))
+        # g.fillRect(x, height - percent, 1, percent) 
+        # ^ (X, Y, Width, Height)
     
     # histogramImage.show()
     histogramImage.save("histogram.png", "PNG")
@@ -278,6 +276,7 @@ class MyImage():
       saturation = -1
       value = -1
 
+      print('r {}\ng {}\nb {}'.format(r, g, b))
       red = (r / 255.0)
       green = (g / 255.0)
       blue = (b / 255.0)
@@ -312,6 +311,7 @@ class MyImage():
       hsv[0] = hue
       hsv[1] = saturation
       hsv[2] = value
+      print('converted hsv = {}'.format(hsv))
       return self
 
 
