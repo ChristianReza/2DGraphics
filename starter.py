@@ -221,7 +221,6 @@ class MyImage():
     width = 256
     height = 300
     histogramImage = Image.new(mode="RGB", size=(width, height), color=(0,0,0))
-    # px = histogramImage.load()
     counts = [0] * width
     for y in range(self.height):
         for x in range(self.width):
@@ -231,15 +230,9 @@ class MyImage():
             g = rgb[1]
             b = rgb[2]
             hsv = [0] * 3
-            print('new hsv: {}' .format(hsv))
             self.myConversion(r, g, b, hsv)
-            # print('converted hsv: {}' .format(hsv))
             value = (int)(hsv[2]*255)
-            # if(value == 1):
-            print('counts[{}] = {}'.format(value, counts[value]))
             counts[value] += 1
-            print('counts[{}] = {}'.format(value, counts[value]))
-            print('\n==================\n')
 
     # Render the histogram
     maxValue = max(counts)
@@ -247,21 +240,9 @@ class MyImage():
         maxValue = cap
     for x in range (len(counts)):
         draw = ImageDraw.Draw(histogramImage)
-        # draw.rectangle((0, 0, len(counts), height), outline = (255, 255, 255))
-        # print(counts[x])
-        # print(maxValue)
-        # print(height)
         percent = (counts[x] / maxValue * height)
-        # print('x {} max {} height {} percent {}'.format(counts[x], maxValue, height, percent))
-        # g.setColor(Color.WHITE)
-        # print('x: {}, height: {}, percent: {}'.format(x, height, percent))
-        # draw.rectangle([(x, height - percent), (x, height - percent)], outline= (255,255,255))
-        # draw.line([(x, height - percent), (x,1)], width=1, fill="white")
-        draw.rectangle([(x, height - percent), (x, x)], outline=(255,255,255))
-        # g.fillRect(x, height - percent, 1, percent) 
-        # ^ (X, Y, Width, Height)
+        draw.rectangle([(x, height - percent), (x+1, height)], outline=(255,255,255))
     
-    # histogramImage.show()
     histogramImage.save("histogram.png", "PNG")
     return self
 
@@ -276,7 +257,6 @@ class MyImage():
       saturation = -1
       value = -1
 
-      print('r {}\ng {}\nb {}'.format(r, g, b))
       red = (r / 255.0)
       green = (g / 255.0)
       blue = (b / 255.0)
@@ -311,7 +291,6 @@ class MyImage():
       hsv[0] = hue
       hsv[1] = saturation
       hsv[2] = value
-      print('converted hsv = {}'.format(hsv))
       return self
 
 
