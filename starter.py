@@ -249,6 +249,42 @@ class MyImage():
 
   def brighten(self, i):
       """brighten image"""
+      px = self.image.load()
+      width = self.width
+      height = self.height
+      newIm = Image.new(mode="RGBA", size=(width, height))
+
+      for y in range(height):
+          for x in range(width):
+              rgb = px[x,y]
+              r = rgb[0]
+              g = rgb[1]
+              b = rgb[2]
+              
+              hsv = [0] * 3
+              
+              self.myConversion(r, g, b, hsv)
+              
+              value = (hsv[2])
+              
+              value += i / (float)(255.0)
+              value = min((float)(1.0), max(0, value))
+              newColor = colorsys.hsv_to_rgb(hsv[0], hsv[1], value)
+              newRed = (int)(newColor[0]*255)
+              newGreen = (int)(newColor[1]*255)
+              newBlue = (int)(newColor[2]*255)
+              again = [0] * 3
+              self.myConversion(newRed, newGreen, newBlue, again)
+              
+              
+              newLoad = newIm.load()
+              newRBG = (newRed, newGreen, newBlue)
+              newLoad[x, y] = newRBG
+              
+      self.image = newIm
+      self.width = newIm.size[0]
+      self.height = newIm.size[1]
+      return self
 
 
   def myConversion(self, r, g, b, hsv):
