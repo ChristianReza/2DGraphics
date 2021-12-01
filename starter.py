@@ -5,8 +5,9 @@ import numpy as np
 
 
 class MyImage():
-  def __init__(self, image):
+  def __init__(self, image, fileName):
     self.image = image
+    self.fileName = fileName
     self.width = image.size[0]
     self.height = image.size[1]
 
@@ -400,13 +401,18 @@ class MyImage():
     print("saving...")
     self.image.save("finished.png", "PNG")
 
+  def reset(self):
+    print("resetting image...")
+    self.image = Image.open(self.fileName)
+    return self
+
   def printDim(self):
       print("Your image dimensions are:")
       print('width: {}\theight: {}' .format(self.width, self.height))
 
 # %%
 selectedImage = input("Enter the name and extension of the image file to modify: ")
-im = MyImage(Image.open(selectedImage))
+im = MyImage(Image.open(selectedImage), selectedImage)
 
 print("Start")
 
@@ -457,6 +463,8 @@ def preview():
 def save():
     im.done()
     return "save"
+def reset():
+    im.reset()
 def default():
     return "Invalid Request"
 
@@ -471,7 +479,8 @@ switcher = {
     "8": histogram,
     "9": brighten,
     "10": preview,
-    "11": save
+    "11": save,
+    "r": reset,
     }
 
 print("What kind of action would you like to preform on your image?")
@@ -487,6 +496,7 @@ options = """
  9: brighten
  10: Preview
  11: Save
+ r: Reset image
  q. Quit
 """
 print(options)
