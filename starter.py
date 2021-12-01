@@ -5,11 +5,11 @@ import numpy as np
 
 
 class MyImage():
-  def __init__(self, image, fileName):
-    self.image = image
+  def __init__(self, fileName):
+    self.image = Image.open(fileName)
     self.fileName = fileName
-    self.width = image.size[0]
-    self.height = image.size[1]
+    self.width = self.image.size[0]
+    self.height = self.image.size[1]
 
   def blackAndWhite(self):
     """Half the image black and white and draw a 
@@ -412,7 +412,7 @@ class MyImage():
 
 # %%
 selectedImage = input("Enter the name and extension of the image file to modify: ")
-im = MyImage(Image.open(selectedImage), selectedImage)
+im = MyImage(selectedImage)
 
 print("Start")
 
