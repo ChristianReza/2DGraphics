@@ -486,11 +486,12 @@ options = """
  8: Histogram
  9: brighten
  10: Preview
- 11: Save and quit
+ 11: Save
+ q. Quit
 """
 print(options)
 request = ''
-while (request != '11'):
+while (request != 'q'):
     request = input("Option #: ")
     print("request is :" + request)
     switch(request)
