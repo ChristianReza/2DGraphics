@@ -323,8 +323,8 @@ class MyImage():
       self.width = newIm.size[0]
       self.height = newIm.size[1]
       return self
-  
-  
+
+
   def contrast(self, amount):
       px = self.image.load()
       width = self.width
@@ -362,7 +362,34 @@ class MyImage():
       self.width = newIm.size[0]
       self.height = newIm.size[1]
       return self
+
+
+  def bwDither(self):
+      px = self.image.load()
+      width = self.width
+      height = self.height
+      newIm = Image.new(mode="RGBA", size=(width, height))
+
+      for y in range(height):
+          for x in range(width):
+              rgb = px[x,y]
+              value = rgb[0]
               
+              finalColor = [0, 0, 0]
+              if (value > 128):
+                finalColor = [255, 255, 255]
+              else:
+                finalColor = [0, 0, 0]
+
+              newLoad = newIm.load()
+              newRBG = (finalColor[0], finalColor[1], finalColor[2])
+              newLoad[x, y] = newRBG
+              
+      self.image = newIm
+      self.width = newIm.size[0]
+      self.height = newIm.size[1]
+      return self
+
 
   def myConversion(self, r, g, b, hsv):
       """Populate HSV"""
@@ -456,8 +483,8 @@ class MyImage():
       self.width = newIm.size[0]
       self.height = newIm.size[1]
       return self
-    
-    
+
+
   def imageKernel(self, blur=3):
     """kernel for image blur"""
     kernel = np.empty((blur, blur))
@@ -544,6 +571,8 @@ def brighten():
 def contrast():
     contrastBy = int(input("Contrast by what: "))
     im.contrast(contrastBy)
+def dither():
+    im.bwDither()
 def preview():
     im.preview()
 def save():
@@ -565,6 +594,7 @@ switcher = {
     "8": histogram,
     "9": brighten,
     "10": contrast,
+    "11": dither,
     "p": preview,
     "s": save,
     "r": reset,
@@ -582,6 +612,7 @@ options = """
  8: Histogram
  9: Brighten
  10: Contrast
+ 11: Dither
  p: Preview
  s: Save
  r: Reset image
