@@ -11,6 +11,7 @@ class MyImage():
     self.width = self.image.size[0]
     self.height = self.image.size[1]
 
+
   def blackAndWhite(self):
     """Half the image black and white and draw a 
     rectable in the top right corner."""
@@ -45,6 +46,7 @@ class MyImage():
     # self.height = im.size[1]
     return self
 
+
   def crop(self, ulx, uly, lrx=0, lry=0):
       """Crop the image"""
       image = self.image.load()
@@ -67,6 +69,7 @@ class MyImage():
       self.width = newIm.size[0]
       self.height = newIm.size[1]
       return self
+
 
   def translate(self, i, j, bool):
       """Translate the image"""
@@ -97,6 +100,7 @@ class MyImage():
       self.width = newIm.size[0]
       self.height = newIm.size[1]
       return self
+
 
   def translateNearestNeighbor(self, i, j, bool):
       """Translate image with nearest neighbor"""
@@ -129,6 +133,7 @@ class MyImage():
       self.width = newIm.size[0]
       self.height = newIm.size[1]
       return self
+
 
   def translateLinear(self, i, j, bool):
       """Translate image with nearest neighbor"""
@@ -177,6 +182,7 @@ class MyImage():
       self.height = newIm.size[1]
       return self
 
+
   def scaleNearestNeighbor(self, scaleX, scaleY):
     """Scale nearest neighbor"""
     px = self.image.load()
@@ -206,6 +212,7 @@ class MyImage():
     self.width = newIm.size[0]
     self.height = newIm.size[1]
     return self
+
 
   def roateNearestNeighbor(self, angle):
     """
@@ -317,6 +324,7 @@ class MyImage():
       self.height = newIm.size[1]
       return self
   
+  
   def contrast(self, amount):
       px = self.image.load()
       width = self.width
@@ -398,6 +406,7 @@ class MyImage():
       hsv[2] = value
       return self
 
+
   def blurImage(self, kernel):
       """blur image"""
       newPix = self.image.load()
@@ -448,6 +457,7 @@ class MyImage():
       self.height = newIm.size[1]
       return self
     
+    
   def imageKernel(self, blur=3):
     """kernel for image blur"""
     kernel = np.empty((blur, blur))
@@ -461,21 +471,26 @@ class MyImage():
     im.blurImage(kernel)
     return self
 
+
   def preview(self):
     self.image.show()
+
 
   def done(self):
     print("saving...")
     self.image.save("finished.png", "PNG")
+
 
   def reset(self):
     print("resetting image...")
     self.image = Image.open(self.fileName)
     return self
 
+
   def printDim(self):
       print("Your image dimensions are:")
       print('width: {}\theight: {}' .format(self.width, self.height))
+
 
 # %%
 selectedImage = input("Enter the name and extension of the image file to modify: ")
