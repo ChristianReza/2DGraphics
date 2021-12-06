@@ -1,6 +1,6 @@
 # %%
 from PIL import Image, ImageDraw
-import colorsys
+import colorsys, math
 import numpy as np
 
 
@@ -207,14 +207,44 @@ class MyImage():
     self.height = newIm.size[1]
     return self
 
-  def roateNearestNeighbor(im, angle):
+  def roateNearestNeighbor(self, angle):
     """
     rotate around upper left pixel
     in image processesing, a positive angle
     rotates clockwise.
-
     atan2
     """
+    px = self.image.load()
+    width = self.width
+    height = self.height
+    newIm = Image.new(mode="RGB", size=(width, height))
+    
+    centerX = width/2
+    centerY = height/2
+
+    for y in range(height):
+        for x in range(width):
+          distanceX = x - centerX
+          distanceY = y - centerY
+          distance = math.sqrt(distanceX * distanceX + distanceY * distanceY)
+          postAngle = math.atan2(distanceY, distanceX)
+          preAngle = postAngle - (float)(angle)
+          
+          originalX = (int) ((distance * math.cos(preAngle) + .5) + centerX)
+          originalY = (int) ((distance * math.sin(preAngle) + .5) + centerY)
+          if (originalX < 0 or originalX >= width or originalY < 0 or originalY >= height):
+              continue
+          
+          pixelInt = px[originalX, originalY]
+          newRBG = (pixelInt)
+          newLoad = newIm.load()
+          newLoad[x, y] = newRBG
+          
+    self.image = newIm
+    self.width = newIm.size[0]
+    self.height = newIm.size[1]
+    return self
+
 
   def histogram(self, cap):
     """Create histogram of image"""
@@ -489,7 +519,8 @@ def scaleNearestNeighbor():
     im.scaleNearestNeighbor(newX, newY)
     im.printDim()
 def roateNearestNeighbor():
-    im.roateNearestNeighbor()
+    angle = float(input("Rotate around center by what angle: "))
+    im.roateNearestNeighbor(angle)
 def histogram():
     im.histogram(-1)
 def brighten():
