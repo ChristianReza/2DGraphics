@@ -286,7 +286,45 @@ class MyImage():
       self.width = newIm.size[0]
       self.height = newIm.size[1]
       return self
+  
+  def contrast(self, amount):
+      px = self.image.load()
+      width = self.width
+      height = self.height
+      newIm = Image.new(mode="RGBA", size=(width, height))
 
+      for y in range(height):
+          for x in range(width):
+              rgb = px[x,y]
+              r = rgb[0]
+              g = rgb[1]
+              b = rgb[2]
+              hsv = [0] * 3
+              
+              self.myConversion(r, g, b, hsv)
+              
+              value = (hsv[2])
+              adjustedValue = value - (float)(.5)
+              adjustedValue = adjustedValue * amount
+              adjustedValue = adjustedValue + (float)(.5)
+              adjustedValue = min((float)(1.0), max(0, adjustedValue))
+              newColor = colorsys.hsv_to_rgb(hsv[0], hsv[1], adjustedValue)
+              newRed = (int)(newColor[0]*255)
+              newGreen = (int)(newColor[1]*255)
+              newBlue = (int)(newColor[2]*255)
+              
+              again = [0] * 3
+              self.myConversion(newRed, newGreen, newBlue, again)
+              
+              newLoad = newIm.load()
+              newRBG = (newRed, newGreen, newBlue)
+              newLoad[x, y] = newRBG
+              
+      self.image = newIm
+      self.width = newIm.size[0]
+      self.height = newIm.size[1]
+      return self
+              
 
   def myConversion(self, r, g, b, hsv):
       """Populate HSV"""
@@ -329,7 +367,6 @@ class MyImage():
       hsv[1] = saturation
       hsv[2] = value
       return self
-
 
   def blurImage(self, kernel):
       """blur image"""
@@ -458,11 +495,14 @@ def histogram():
 def brighten():
     brightenBy = int(input("Brighten by what: "))
     im.brighten(brightenBy)
+def contrast():
+    contrastBy = int(input("Contrast by what: "))
+    im.contrast(contrastBy)
 def preview():
     im.preview()
 def save():
     im.done()
-    return "save"
+    return "saved"
 def reset():
     im.reset()
 def default():
@@ -478,8 +518,9 @@ switcher = {
     "7": roateNearestNeighbor,
     "8": histogram,
     "9": brighten,
-    "10": preview,
-    "11": save,
+    "10": contrast,
+    "p": preview,
+    "s": save,
     "r": reset,
     }
 
@@ -493,11 +534,12 @@ options = """
  6: Scale Nearest Neighbor
  7: Roate Nearest Neighbor
  8: Histogram
- 9: brighten
- 10: Preview
- 11: Save
+ 9: Brighten
+ 10: Contrast
+ p: Preview
+ s: Save
  r: Reset image
- q. Quit
+ q: Quit
 """
 print(options)
 request = ''
