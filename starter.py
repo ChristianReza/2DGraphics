@@ -364,7 +364,7 @@ class MyImage():
       return self
 
 
-  def bwDither(self):
+  def dither(self):
       self.grayscale()
       px = self.image.load()
       width = self.width
