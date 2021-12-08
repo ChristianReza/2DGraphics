@@ -268,7 +268,7 @@ class MyImage():
             g = rgb[1]
             b = rgb[2]
             hsv = [0] * 3
-            self.myConversion(r, g, b, hsv)
+            self.convertRGBtoHSV(r, g, b, hsv)
             value = (int)(hsv[2]*255)
             counts[value] += 1
 
@@ -301,7 +301,7 @@ class MyImage():
               
               hsv = [0] * 3
               
-              self.myConversion(r, g, b, hsv)
+              self.convertRGBtoHSV(r, g, b, hsv)
               
               value = (hsv[2])
               
@@ -312,7 +312,7 @@ class MyImage():
               newGreen = (int)(newColor[1]*255)
               newBlue = (int)(newColor[2]*255)
               again = [0] * 3
-              self.myConversion(newRed, newGreen, newBlue, again)
+              self.convertRGBtoHSV(newRed, newGreen, newBlue, again)
               
               
               newLoad = newIm.load()
@@ -339,7 +339,7 @@ class MyImage():
               b = rgb[2]
               hsv = [0] * 3
               
-              self.myConversion(r, g, b, hsv)
+              self.convertRGBtoHSV(r, g, b, hsv)
               
               value = (hsv[2])
               adjustedValue = value - (float)(.5)
@@ -352,7 +352,7 @@ class MyImage():
               newBlue = (int)(newColor[2]*255)
               
               again = [0] * 3
-              self.myConversion(newRed, newGreen, newBlue, again)
+              self.convertRGBtoHSV(newRed, newGreen, newBlue, again)
               
               newLoad = newIm.load()
               newRBG = (newRed, newGreen, newBlue)
@@ -365,6 +365,7 @@ class MyImage():
 
 
   def bwDither(self):
+      self.grayscale()
       px = self.image.load()
       width = self.width
       height = self.height
@@ -391,7 +392,35 @@ class MyImage():
       return self
 
 
-  def myConversion(self, r, g, b, hsv):
+  def grayscale(self):
+      px = self.image.load()
+      width = self.width
+      height = self.height
+      newIm = Image.new(mode="RGBA", size=(width, height))
+
+      for y in range(height):
+          for x in range(width):
+              rgb = px[x,y]
+              r = rgb[0]
+              g = rgb[1]
+              b = rgb[2]
+              hsv = [0] * 3
+
+              self.convertRGBtoHSV(r, g, b, hsv)
+
+              value = math.floor(min(255, hsv[2] * (float)(255.0)))
+
+              newLoad = newIm.load()
+              newRBG = (value, value, value)
+              newLoad[x, y] = newRBG
+
+      self.image = newIm
+      self.width = newIm.size[0]
+      self.height = newIm.size[1]
+      return self
+
+
+  def convertRGBtoHSV(self, r, g, b, hsv):
       """Populate HSV"""
       hue = -1
       saturation = -1
