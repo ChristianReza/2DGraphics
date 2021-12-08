@@ -365,7 +365,7 @@ class MyImage():
 
 
   def dither(self):
-      self.grayscale()
+    #   self.grayscale()
       px = self.image.load()
       width = self.width
       height = self.height
@@ -601,7 +601,9 @@ def contrast():
     contrastBy = int(input("Contrast by what: "))
     im.contrast(contrastBy)
 def dither():
-    im.bwDither()
+    im.dither()
+def grayscale():
+    im.grayscale()
 def preview():
     im.preview()
 def save():
@@ -624,6 +626,7 @@ switcher = {
     "9": brighten,
     "10": contrast,
     "11": dither,
+    "12": grayscale,
     "p": preview,
     "s": save,
     "r": reset,
@@ -642,6 +645,7 @@ options = """
  9: Brighten
  10: Contrast
  11: Dither
+ 12: Grayscale
  p: Preview
  s: Save
  r: Reset image
