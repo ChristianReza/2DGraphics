@@ -365,22 +365,44 @@ class MyImage():
 
 
   def dither(self):
-    #   self.grayscale()
+      self.grayscale()
       px = self.image.load()
       width = self.width
       height = self.height
       newIm = Image.new(mode="RGBA", size=(width, height))
+      
+      errorList = [[0 for c in range(height)] for r in range(width)]
 
-      for y in range(height):
-          for x in range(width):
+      for y in range(height - 1):
+          for x in range(width - 1):
+              error = errorList[x][y]
               rgb = px[x,y]
-              value = rgb[0]
+              r = rgb[0]
+            #   g = rgb[1]
+            #   b = rgb[2]
+            #   value = rgb[0]
+            #   self.grayscale()
+              
+              bw = r
+              adjusted = bw + error
               
               finalColor = [0, 0, 0]
-              if (value > 128):
-                finalColor = [255, 255, 255]
-              else:
+              if (adjusted < 128):
                 finalColor = [0, 0, 0]
+                error += bw - 0
+              else:
+                finalColor = [255, 255, 255]
+                error += bw - 255
+                
+              if (x < newIm.width - 1):
+                  errorList[x + 1][y] += error * (7 / (float)(16.0))
+              if (y < newIm.height - 1):
+                  if (x > 0):
+                      errorList[x - 1][y + 1] += error * (3 / (float)(16.0))
+                  errorList[x][y + 1] += error * (5 / 16.0)
+              if (x < newIm.width - 1):
+                  errorList[x + 1][y + 1] += error * (1 / 16.0)
+              
 
               newLoad = newIm.load()
               newRBG = (finalColor[0], finalColor[1], finalColor[2])
@@ -390,6 +412,69 @@ class MyImage():
       self.width = newIm.size[0]
       self.height = newIm.size[1]
       return self
+
+
+  def ditherColor(self):
+      """Dither with color!"""
+      px = self.image.load()
+      width = self.width
+      height = self.height
+      newIm = Image.new(mode="RGBA", size=(width, height))
+      
+      # Create an empty list
+      colors = []
+      for i in range(8):
+          colors.append([])
+      
+      colors[0].append((0,0,0))
+      colors[1].append((255, 255, 255))
+      colors[2].append((255, 0, 0))
+      colors[3].append((0, 255, 0))
+      colors[4].append((0, 0, 255))
+      colors[5].append((255, 255, 0))
+      colors[6].append((0, 255, 255))
+      colors[7].append((255, 0, 255))
+      
+    #   print(colors[1])
+    #   print(colors[1][0])
+    #   print(colors[1][0][0])
+      
+       
+      for y in range(height):
+          rangeR = 0
+          rangeG = 0
+          rangeB = 0
+          for x in range(width):
+              rgb = px[x,y]
+              r = rgb[0]
+              g = rgb[1]
+              b = rgb[2]
+              adjust = ((r + rangeR), (g + rangeG), (b + rangeB))
+              
+            #   pickedColor = Arrays.stream(myColors).reduce((a, b) -> a.distanceL1(adjusted) < b.distanceL1(adjusted) ? a : b).get();
+              for i in colors:
+                  temp = i[0]
+                  a = self.distance(temp, adjust)
+                  b = self.distance(temp, adjust)
+              
+              rangeR = adjust[0]
+              rangeG = adjust[1]
+              rangeB = adjust[2]
+              
+              newLoad = newIm.load()
+              newRBG = (rangeR, rangeG, rangeB)
+              newLoad[x, y] = newRBG
+      
+      self.image = newIm
+      self.width = newIm.size[0]
+      self.height = newIm.size[1]
+      return self
+
+
+  def distance(self, colorA, colorB):
+      print(colorA)
+      print(colorB)
+      return abs(colorA[0] - colorB[0]) + abs(colorA[1] - colorB[1]) + abs(colorA[2] - colorB[2])
 
 
   def grayscale(self):
@@ -600,6 +685,8 @@ def brighten():
 def contrast():
     contrastBy = int(input("Contrast by what: "))
     im.contrast(contrastBy)
+def ditherColor():
+    im.ditherColor()
 def dither():
     im.dither()
 def grayscale():
@@ -625,8 +712,9 @@ switcher = {
     "8": histogram,
     "9": brighten,
     "10": contrast,
-    "11": dither,
-    "12": grayscale,
+    "11": ditherColor,
+    "12": dither,
+    "13": grayscale,
     "p": preview,
     "s": save,
     "r": reset,
@@ -644,8 +732,9 @@ options = """
  8: Histogram
  9: Brighten
  10: Contrast
- 11: Dither
- 12: Grayscale
+ 11: Dither Color
+ 12: Dither BW
+ 13: Grayscale
  p: Preview
  s: Save
  r: Reset image
