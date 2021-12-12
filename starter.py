@@ -472,8 +472,6 @@ class MyImage():
 
 
   def distance(self, colorA, colorB):
-      print(colorA)
-      print(colorB)
       return abs(colorA[0] - colorB[0]) + abs(colorA[1] - colorB[1]) + abs(colorA[2] - colorB[2])
 
 
@@ -670,8 +668,8 @@ def translateLinear():
     im.printDim()
 def scaleNearestNeighbor():
     im.printDim()
-    newX = int(input("Enter scale for X: "))
-    newY = int(input("Enter scale for Y: "))
+    newX = float(input("Enter scale for X: "))
+    newY = float(input("Enter scale for Y: "))
     im.scaleNearestNeighbor(newX, newY)
     im.printDim()
 def roateNearestNeighbor():
